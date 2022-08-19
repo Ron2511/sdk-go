@@ -166,3 +166,11 @@ fabric.properties
 ### macOS ###
 # General
 .DS_Store
+
+### Report files ###
+report/
+*.html
+*.xml
+
+### Logs ###
+*.log

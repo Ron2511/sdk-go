@@ -21,4 +21,19 @@ type Order struct {
 
 // APIResponse stores the API response returned by the server.
 type Checkout struct {
+	id          string
+	tipe        string
+	uuid        string
+	orderNumber string
+	currency    string
+	amount      float32
+	status      string
+	refNumber   string
+	links       Links
+}
+
+type Links struct {
+	checkoutLink string
+	success      string
+	failed       string
 }

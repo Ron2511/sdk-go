@@ -12,28 +12,30 @@ package models
 // APIResponse stores the API response models returned by the server.
 
 //Order
-type Order struct {
-	orderId   string
-	status    string
-	refNumber string
-	amount    float32
-}
+type (
+	Order struct {
+		OrderId   string  `json:"order_id"`
+		Status    string  `json:"status"`
+		RefNumber string  `json:"ref_number"`
+		Amount    float32 `json:"amount"`
+	}
 
-// APIResponse stores the API response returned by the server.
-type Checkout struct {
-	id          string
-	tipe        string
-	uuid        string
-	orderNumber string
-	currency    string
-	amount      float32
-	status      string
-	refNumber   string
-	links       Links
-}
+	// APIResponse stores the API response returned by the server.
+	Checkout struct {
+		Id          string  `json:"id"`
+		Type        string  `json:"type"`
+		Uuid        string  `json:"uuid"`
+		OrderNumber string  `json:"orderNumber"`
+		Currency    string  `json:"currency"`
+		Status      string  `json:"status"`
+		RefNumber   string  `json:"refNumber"`
+		Amount      float32 `json:"amount"`
+		Links       Links   `json:"links"`
+	}
 
-type Links struct {
-	checkoutLink string
-	success      string
-	failed       string
-}
+	Links struct {
+		CheckoutLink string `json:"checkoutLink"`
+		Success      string `json:"success"`
+		Failed       string `json:"failed"`
+	}
+)

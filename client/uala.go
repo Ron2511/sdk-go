@@ -1,13 +1,13 @@
-package uala
+package client
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"net/http"
-
 	"github.com/Ron2511/sdk-go/constants"
 	"github.com/Ron2511/sdk-go/models"
+	"io/ioutil"
+	"net/http"
 )
 
 type api struct {
@@ -19,8 +19,8 @@ type api struct {
 type Client interface {
 	//Auth()
 	GetOrder(orderId string) models.Order
-	/// Validar el nombre
-	Checkout()
+	///Validar el nombre
+	Checkout(body models.OrderInput) models.OrderOutput
 	GetFailedNotifications()
 }
 
@@ -57,14 +57,32 @@ func (a *api) GetOrder(orderId string) models.Order {
 	return order
 }
 
-func (a *api) Checkout() {
-	panic("Not implemented!")
+func (a *api) Checkout(body models.OrderInput) models.OrderOutput {
+	endpoint := fmt.Sprintf("%s/1/checkout", a.BaseURL)
+	bearerToken := fmt.Sprintf("Bearer %s", a.Token)
+	bodyPost, err := json.Marshal(body)
+	if err != nil {
+		panic(err.Error())
+	}
+	request, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer(bodyPost))
+	request.Header.Add("Authorization", bearerToken)
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer response.Body.Close()
+	bodyReturn, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		panic(err.Error())
+	}
+	var orderOutput models.OrderOutput
+	if err := json.Unmarshal(bodyReturn, &orderOutput); err != nil {
+		panic(err.Error())
+	}
+	return orderOutput
 }
 
 func (a *api) GetFailedNotifications() {
 	panic("Not implemented!")
 }
-
-//cli := api.New()
-//ok, err := cli.Authenticate()
-//cli.GetOrder()

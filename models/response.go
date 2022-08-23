@@ -1,5 +1,5 @@
 /*
-uala-api-checkout SDK GO
+client-api-checkout SDK GO
 User API.
 API version: 1.0.0
 Contact: "MAIL CONTACT"
@@ -11,8 +11,8 @@ package models
 
 // APIResponse stores the API response models returned by the server.
 
-//Order
 type (
+	//Order
 	Order struct {
 		OrderId   string  `json:"order_id"`
 		Status    string  `json:"status"`
@@ -20,8 +20,8 @@ type (
 		Amount    float32 `json:"amount"`
 	}
 
-	// APIResponse stores the API response returned by the server.
-	Checkout struct {
+	//Checkout
+	OrderOutput struct {
 		Id          string  `json:"id"`
 		Type        string  `json:"type"`
 		Uuid        string  `json:"uuid"`

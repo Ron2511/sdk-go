@@ -36,7 +36,6 @@ func (a *api) GetOrder(orderId string) models.Order {
 	endpoint := fmt.Sprintf("%s/1/order/%s", a.BaseURL, orderId)
 	bearerToken := fmt.Sprintf("Bearer %s", a.Token)
 	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
-	var order models.Order
 	if err != nil {
 		panic(err.Error())
 	}
@@ -51,6 +50,7 @@ func (a *api) GetOrder(orderId string) models.Order {
 	if err != nil {
 		panic(err.Error())
 	}
+	var order models.Order
 	if err := json.Unmarshal(body, &order); err != nil {
 		panic(err.Error())
 	}
@@ -84,5 +84,18 @@ func (a *api) Checkout(body models.OrderInput) models.OrderOutput {
 }
 
 func (a *api) GetFailedNotifications() {
-	panic("Not implemented!")
+	endpoint := fmt.Sprintf("%s/notifications/", a.BaseURL)
+	bearerToken := fmt.Sprintf("Bearer %s", a.Token)
+	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
+	if err != nil {
+		panic(err.Error())
+	}
+	request.Header.Add("Authorization", bearerToken)
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		panic(err.Error())
+	}
+	defer response.Body.Close()
+	//No se que carajo es el objego FailedNotifications
 }

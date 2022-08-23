@@ -1,17 +1,14 @@
-package client
+package main
 
 import (
-	"flag"
 	"fmt"
+
+	"github.com/Ron2511/sdk-go/uala"
 )
 
 func main() {
-
-	fmt.Println("Esto es nuestro SDK en GO")
-
-	token := flag.String("token", "", "Token para usar la api")
-	flag.Parse()
-	// Imprimirlo
-	fmt.Println("El token es ", *token)
-
+	token := ""
+	cli := uala.New(token)
+	order := cli.GetOrder("052f288c-5c37-4760-971c-3613b140fde9")
+	fmt.Println(order)
 }

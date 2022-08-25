@@ -97,5 +97,5 @@ func (a *api) GetFailedNotifications() {
 		panic(err.Error())
 	}
 	defer response.Body.Close()
-	//No se que carajo es el objego FailedNotifications
+	//No se que carajo es el objego FailedNotifications,,
 }

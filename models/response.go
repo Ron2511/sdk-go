@@ -38,4 +38,17 @@ type (
 		Success      string `json:"success"`
 		Failed       string `json:"failed"`
 	}
+
+	//FailedNotifications
+	FailedNotifications struct {
+		Id          string  `json:"id"`
+		Type        string  `json:"type"`
+		Uuid        string  `json:"uuid"`
+		OrderNumber string  `json:"orderNumber"`
+		Currency    string  `json:"currency"`
+		Status      string  `json:"status"`
+		RefNumber   string  `json:"refNumber"`
+		Amount      float32 `json:"amount"`
+		Links       Links   `json:"links"`
+	}
 )

@@ -41,14 +41,12 @@ type (
 
 	//FailedNotifications
 	FailedNotifications struct {
-		Id          string  `json:"id"`
-		Type        string  `json:"type"`
-		Uuid        string  `json:"uuid"`
-		OrderNumber string  `json:"orderNumber"`
-		Currency    string  `json:"currency"`
-		Status      string  `json:"status"`
-		RefNumber   string  `json:"refNumber"`
-		Amount      float32 `json:"amount"`
-		Links       Links   `json:"links"`
+		Uuid             string  `json:"uuid"`
+		AccountId        string  `json:"account_id"`
+		StatusCode       string  `json:"status_code"`
+		Attempts         string  `json:"attempts"`
+		Amount           string  `json:"amount"`
+		CreatedDate      string  `json:"created_date"`
+		
 	}
 )

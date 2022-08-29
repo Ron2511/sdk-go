@@ -21,7 +21,7 @@ type Client interface {
 	GetOrder(orderId string) models.Order
 	///Validar el nombre
 	Checkout(body models.OrderInput) models.OrderOutput
-	GetFailedNotifications()
+	GetFailedNotifications() models.FailedNotifications
 }
 
 func New(token string) Client {
@@ -83,7 +83,7 @@ func (a *api) Checkout(body models.OrderInput) models.OrderOutput {
 	return orderOutput
 }
 
-func (a *api) GetFailedNotifications() {
+func (a *api) GetFailedNotifications() models.FailedNotifications{
 	endpoint := fmt.Sprintf("%s/notifications/", a.BaseURL)
 	bearerToken := fmt.Sprintf("Bearer %s", a.Token)
 	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
@@ -97,5 +97,13 @@ func (a *api) GetFailedNotifications() {
 		panic(err.Error())
 	}
 	defer response.Body.Close()
-	//No se que carajo es el objego FailedNotifications,,
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		panic(err.Error())
+	}
+	var failedNotifications models.FailedNotifications
+	if err := json.Unmarshal(body, &failedNotifications); err != nil {
+		panic(err.Error())
+	}
+	return failedNotifications
 }

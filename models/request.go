@@ -2,11 +2,11 @@ package models
 
 //Payment
 type OrderInput struct {
-	amount          float32 `json:"amount"`
-	description     string  `json:"description"`
-	userName        string  `json:"userName"`
-	callbackFail    string  `json:"callback_fail"`
-	callbackSuccess string  `json:"callback_success"`
-	origin          string  `json:"origin"`
-	notificationUrl string  `json:"notification_url"`
+	Amount          float32 `json:"amount"`
+	Description     string  `json:"description"`
+	UserName        string  `json:"userName"`
+	CallbackFail    string  `json:"callback_fail"`
+	CallbackSuccess string  `json:"callback_success"`
+	Origin          string  `json:"origin"`
+	NotificationUrl string  `json:"notification_url"`
 }

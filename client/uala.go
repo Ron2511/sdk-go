@@ -4,10 +4,11 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/Ron2511/sdk-go/constants"
-	"github.com/Ron2511/sdk-go/models"
 	"io/ioutil"
 	"net/http"
+
+	"github.com/Ron2511/sdk-go/constants"
+	"github.com/Ron2511/sdk-go/models"
 )
 
 type api struct {
@@ -17,19 +18,61 @@ type api struct {
 }
 
 type Client interface {
-	//Auth()
+	Auth(credentials string)
 	GetOrder(orderId string) models.Order
 	///Validar el nombre
 	Checkout(body models.OrderInput) models.OrderOutput
 	GetFailedNotifications() models.FailedNotifications
 }
 
-func New(token string) Client {
+func New(token *string) Client {
+	tk := func(token *string) string {
+		if token != nil {
+			return *token
+		}
+		return ""
+	}(token)
 	return &api{
 		AuthURL: constants.AUTH_URL,
 		BaseURL: constants.BASE_URL,
-		Token:   token,
+		Token:   tk,
 	}
+}
+
+func (a *api) Auth(credentials string) {
+	type authToken struct {
+		AccessToken string `json:"access_token"`
+	}
+
+	var (
+		endpoint   string = fmt.Sprintf("%s/1/auth/token", a.AuthURL)
+		token      authToken
+		payload    []byte        = []byte(credentials)
+		bodyReader *bytes.Reader = bytes.NewReader(payload)
+	)
+
+	request, err := http.NewRequest(http.MethodPost, endpoint, bodyReader)
+	if err != nil {
+		panic(err)
+	}
+
+	client := &http.Client{}
+	response, err := client.Do(request)
+	if err != nil {
+		panic(err)
+	}
+	defer response.Body.Close()
+
+	body, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	if err := json.Unmarshal(body, &token); err != nil {
+		panic(err)
+	}
+
+	a.Token = token.AccessToken
 }
 
 func (a *api) GetOrder(orderId string) models.Order {
@@ -65,6 +108,9 @@ func (a *api) Checkout(body models.OrderInput) models.OrderOutput {
 		panic(err.Error())
 	}
 	request, err := http.NewRequest(http.MethodPost, endpoint, bytes.NewBuffer(bodyPost))
+	if err != nil {
+		panic(err)
+	}
 	request.Header.Add("Authorization", bearerToken)
 	client := &http.Client{}
 	response, err := client.Do(request)
@@ -83,7 +129,7 @@ func (a *api) Checkout(body models.OrderInput) models.OrderOutput {
 	return orderOutput
 }
 
-func (a *api) GetFailedNotifications() models.FailedNotifications{
+func (a *api) GetFailedNotifications() models.FailedNotifications {
 	endpoint := fmt.Sprintf("%s/notifications/", a.BaseURL)
 	bearerToken := fmt.Sprintf("Bearer %s", a.Token)
 	request, err := http.NewRequest(http.MethodGet, endpoint, nil)
